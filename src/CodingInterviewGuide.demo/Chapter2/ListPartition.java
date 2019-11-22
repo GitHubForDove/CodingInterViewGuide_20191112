@@ -75,13 +75,68 @@ public class ListPartition {
         nodeArr[j] = temp;
     }
 
+    /**
+     * 第二种方法 进阶
+     */
+    public static ListNode listPartition2(ListNode head, int privot) {
+        ListNode sH = null; // 小的头
+        ListNode sT = null;
+        ListNode eH = null;
+        ListNode eT = null;
+        ListNode bH = null;
+        ListNode bT = null;
+        ListNode next = null;
+        // 所有的节点分进三个链表中
+        while (head != null) {
+            next = head.next;
+            head.next = null;
+
+            if (head.val < privot) {
+                if (sH == null) {
+                     sH = head;
+                     sT = head;
+                } else {
+                    sT.next = head;
+                    sT = head;
+                }
+            } else if (head.val == privot) {
+                if (eH == null) {
+                    eH = head;
+                    eT = head;
+                } else {
+                    eT.next = head;
+                    eT = head;
+                }
+            } else {
+                if (bH == null) {
+                    bH = head;
+                    bT = head;
+                } else {
+                    bT.next = head;
+                    bT = head;
+                }
+            }
+            head = next;
+        }
+        // 小的和相等的相连
+        if (sT != null) {
+            sT.next = eH;
+            eT = eT == null ? sT : eT;
+        }
+        if (eT != null) {
+            eT.next = bH;
+        }
+
+        return sH != null ? sH : eH != null ? eH : bH;
+    }
+
 
     public static void main(String[] args) {
-        int[] nums = new int[]{9,0,4,5,1};
+        int[] nums = new int[]{9,0,4,5,1,6,8,4,4,5,4};
         int pivot = 4;
         ListNode head = GenerationListUtils.generationList(nums);
         ListPartition listPartition = new ListPartition();
-        ListNode res = listPartition.listPartition(head, pivot);
+        ListNode res = listPartition.listPartition2(head, pivot);
         while (res != null) {
             System.out.println(res.val + ",");
             res = res.next;
