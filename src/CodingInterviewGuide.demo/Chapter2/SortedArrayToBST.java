@@ -1,6 +1,7 @@
 package CodingInterviewGuide.demo.Chapter2;
 
 
+import Utils.PrintTreeUtils;
 import Utils.TreeNode;
 
 /**
@@ -20,15 +21,17 @@ public class SortedArrayToBST {
         if (l > r) {
             return null;
         }
-        int m = l + ((r-1)>>1);
-        TreeNode root = new TreeNode(m);
+        int m = l + (r)>>1;
+        TreeNode root = new TreeNode(nums[m]);
         root.left = buildTree(nums, l, m-1);
         root.right = buildTree(nums, m+1, r);
         return root;
     }
 
     public static void main(String[] args) {
-        SortedArrayToBST sortedArrayToBST = new SortedArrayToBST();
-        int[] nums = new int[]{};
+        SortedArrayToBST satb = new SortedArrayToBST();
+        int[] nums = new int[]{-10, -3, 0, 5, 9};
+        TreeNode head = satb.sortedArrayToBST(nums);
+        PrintTreeUtils.midPrintTree(head);
     }
 }
