@@ -111,6 +111,7 @@ public class PrintTreeUtils {
             while (!stack2.isEmpty()) {
                 System.out.println(stack2.pop().value + ",");
             }
+
         }
     }
 
