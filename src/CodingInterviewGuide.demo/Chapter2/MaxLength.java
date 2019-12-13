@@ -16,7 +16,7 @@ public class MaxLength {
         }
 
         HashMap<Integer, Integer> map = new HashMap<>();
-        map.put(0,-1);
+        map.put(0,-1);// 重要
         int len = 0;
         int sum = 0;
         for (int i=0; i< arr.length; i++) {
