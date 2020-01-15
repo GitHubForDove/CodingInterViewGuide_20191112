@@ -9,18 +9,36 @@ package CodingInterviewGuide.demo.Chapter5;
 public class MinLength {
 
     public int minLength(String s1, String s2) {
-        if (s2 == null || s2.equals("")) {
+        if (s1 == null || s2 == null || s1.length() < s2.length()) {
             return 0;
         }
-        int len = 0;
-        for (int i=0; i<s1.length(); i++) {
+        char[] chas1 = s1.toCharArray();
+        char[] chas2 = s2.toCharArray();
+        int[] map = new int[256];
+        for (int i=0; i != chas2.length; i++) {
+            map[chas2[i]]++;
+        }
 
-            for (int j=0; j<s2.length();j++) {
-
+        int left = 0;
+        int right = 0;
+        int match = chas2.length;
+        int minLen = Integer.MAX_VALUE;
+        while (right != chas1.length) {
+            map[chas1[right]]--;
+            if (map[chas1[right]] >= 0) {
+                match--;
+            }
+            if (match == 0) {
+                while (map[chas1[left]] < 0) {
+                    map[chas1[left++]]++;
+                }
+                minLen = Math.min(minLen, right - left +1);
+                match++;
+                map[chas1[left++]]++;
             }
         }
 
-        return 0;
+        return minLen == Integer.MAX_VALUE ? 0 : minLen;
     }
 
 }

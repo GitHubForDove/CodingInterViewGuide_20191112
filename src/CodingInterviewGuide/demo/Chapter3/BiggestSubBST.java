@@ -3,54 +3,52 @@ package CodingInterviewGuide.demo.Chapter3;
 
 import Utils.TreeNode;
 
-import java.util.HashMap;
-
 /**
- * 在二叉树中找到累加和为指定的最长路径长度
+ * 找到二叉树中的最大搜索二叉树
  *
  * 题目：
- *    给定一颗二叉树的头节点head 和 一个32位整数sum，二叉树节点值类型为整型，
- *    求累加和为sum的最长路径长度。路径是指从某个节点往下，每次最多选择一个孩子节点或者不选所形成的节点链。
+ *  给定一颗二叉树的头节点 head, 已知其中所有节点的值都不一样，找到含有节点最多的搜索二叉树，
+ * 并返回这颗二叉树的头节点.
+ *
  */
 public class BiggestSubBST {
 
-    /**
-     *
-     */
-    public int getMaxLength(TreeNode head, int sum) {
-        HashMap<Integer, Integer> sumMap = new HashMap<>();
-        sumMap.put(0, 0); // 重要
-        return preOrder(head, sum, 0, 1, 0, sumMap);
+    public TreeNode biggestSubBST(TreeNode head) {
+        int[] record = new int[3];
+        return posOrder(head, record);
     }
 
-    /**
-     * 前序递归 算路径和
-     */
-    private int preOrder(TreeNode head, int sum, int preSum, int level, int maxLen,
-                         HashMap<Integer, Integer> sumMap) {
-
-
+    private TreeNode posOrder(TreeNode head, int[] record) {
         if (head == null) {
-            return maxLen;
-        }
-        int curSum = preSum + head.value;
-
-        // 将当前的路径和加入到 map中 记录下来
-        if (!sumMap.containsKey(curSum)) {
-            sumMap.put(curSum, level);
-        }
-        // 计算是否路径之前有路径和 之间相差 sum的key存在
-        if (sumMap.containsKey(curSum - sum)) {
-            maxLen = Math.max(level - sumMap.get(curSum - sum), maxLen);
+            record[0] = 0;
+            record[1] = Integer.MAX_VALUE;
+            record[2] = Integer.MIN_VALUE;
         }
 
-        maxLen = preOrder(head.left, sum, curSum, level+1, maxLen, sumMap);
-        maxLen = preOrder(head.right, sum, curSum, level+1, maxLen, sumMap);
+        int value = head.value;
+        TreeNode left = head.left;
+        TreeNode right = head.right;
 
-        if (level == sumMap.get(curSum)) {
-            sumMap.remove(curSum);
+        TreeNode lBST = posOrder(left, record);
+        int lSize = record[0];
+        int lMin = record[1];
+        int lMax = record[2];
+        TreeNode rBST = posOrder(right, record);
+        int rSize = record[0];
+        int rMin = record[1];
+        int rMax = record[2];
+        record[1] = Math.min(lMin, value);
+        record[2] = Math.max(lMax, value);
+        if (left == lBST && right == rBST && lMax < value && value < rMin) {
+            record[0] = lSize + rSize + 1;
+            return head;
         }
+        record[0] = Math.max(lSize, rSize);
+        return lSize > rSize ? lBST : rBST;
+    }
 
-        return maxLen;
+
+    public static void main(String[] args) {
+
     }
 }
